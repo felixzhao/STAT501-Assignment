@@ -132,4 +132,14 @@ pander(summary(fit3), caption="")
 par(mfrow=c(2,2)) ##Places the next four graphs in a single window in a 2 x 2 configuration
 plot(fit3)
 ```
+model selection
 
+```{r}
+
+# 'Country', 'Issues', 'Explain', 'Evidence', 'Interest', 'Support',
+#       'Income', 'Health', 'Edu', 'HDI', 'Overall'
+
+fit5<-lm(Overall ~Issues+Explain+Evidence+Interest+Support+Income+Health+Edu+HDI, data=dataset_complete)
+pander(summary(fit5), caption="")
+
+```
