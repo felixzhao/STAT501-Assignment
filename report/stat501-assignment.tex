@@ -140,29 +140,112 @@ This study will not cover:
 
 By adhering to these objectives and scope, we aim to provide a robust analysis that can inform policy decisions and educational reforms aimed at improving both educational outcomes and national development.
 
-\section{Methodology}
+% \section{Methodology}
 
-Overview of the statistical methods used.
-Software and tools used for analysis.
+% Overview of the statistical methods used.
+% Software and tools used for analysis.
 
 \section{Data Description}
 
-Sources of data.
-Description of variables.
-Data collection methods.
-Data quality and validation procedures.
+% # Sources of data.
+% # Description of variables.
+% # Data collection methods.
+% # Data quality and validation procedures.
+
+\subsection{Programme for International Student Assessment (PISA)}
+
+\label{ss.pisa}
+PISA is the OECD's Programme for International Student Assessment. PISA measures 15-year-olds’ ability to use their reading, mathematics and science knowledge and skills to meet real-life challenges.
+
+We involved, Overall Science Score (average score for 15 year olds),  Interest in science, Support for scientific inquiry, etc. 
+
+\subsection{Human Development Index (HDI)}
+
+\label{ss.hdi}
+Human Development Index (HDI)The HDI is a summary measure for assessing long-term progress in three basic dimensions of human development: a long and healthy life, access to knowledge and a decent standard of living.
+
+In this work, we involved Income Index, Health Index, Education Index and Overall Human Development Index.
 
 \section{Preliminary Data Analysis}
 
-Descriptive statistics.
-Data visualization.
-Identification of outliers or anomalies.
+% Descriptive statistics.
+% Data visualization.
+% Identification of outliers or anomalies.
+
+This Dataset has 64 country level summarise data.
+
+
+\subsection{Data Imputation}
+\label{ss.imputation}
+
+In Figure $\ref{fig:missing}$ (a) shows the missing data info in raw data.
+As PISA and HDI do not have correlation relationship, 
+thus we do not keep rows which all PISA info or all HDI info missed.
+
+In Figure $\ref{fig:missing}$ (b) shows the missing info after filter.
+There are 54 country level observisons left.
+
+We replace missing values by R MICE "predictive mean matching" (PMM) approach.
+
+
+\label{ss.imputataion}
+
+\begin{figure}[htb]
+  \begin{minipage}[b]{1.0\linewidth}
+    \centering
+    \centerline{\includegraphics[width=7.0cm]{images/null_1}}
+  %  \vspace{1.5cm}
+    \centerline{(a) raw data}\medskip
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{1.0\linewidth}
+    \centering
+    \centerline{\includegraphics[width=7.0cm]{images/null_2}}
+  %  \vspace{1.5cm}
+    \centerline{(b) remove missing }\medskip
+  \end{minipage}
+  %
+  \caption{Visualize Missing Data}
+  \label{fig:missing}
+  %
+  \end{figure}
+
 
 \section{Statistical Models and Techniques Used}
+% Statistical tests conducted.
+% Models fitted to the data.
+% Model validation techniques.
 
-Statistical tests conducted.
-Models fitted to the data.
-Model validation techniques.
+\subsection{Correlation Analysis}
+\label{ss.corr}
+
+In Fig $\ref{fig:corr}$ shows all variable in linear correlation.
+Income shows negative correlation to Support,
+HDI shows negative correlation to interest,
+and both Support and interest shows negative collection to Overall Score.
+
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=\linewidth]{images/corr}
+  \caption{Visualize Missing Data}
+  \label{fig:corr}
+\end{figure}
+
+
+\subsection{regression Analysis}
+\label{ss.reg}
+
+\subsubsection{wealthier (higher income) countries and Support of Science}
+\label{sss.incvssup}
+
+To determine the relationship between a country's wealth (as indicated by its income) and the support it provides, we employed a linear regression analysis. The dependent variable in our model was "Support", and the independent variable was "Income". The model can be represented as:
+
+$\text{Support} = -1.662 \times 10^{-16} - 0.4773 \times \text{Income} + \epsilon$
+
+The model has an $R^2$ value of 0.2278, indicating that approximately 22.78\% of the variation in support can be explained by the country's income. The adjusted  $R^2$ is 0.213, which takes into account the number of predictors in the model and provides a more accurate representation of the model's explanatory power.
+
+The results suggest that wealthier countries (with higher income) tend to provide less support. The negative coefficient for Income indicates that for every unit increase in income, the support decreases by 0.4773 units, on average, holding all else constant. The statistical significance of the coefficient (p-value < 0.05) provides evidence to reject the null hypothesis that income has no effect on support.
 
 \section{Key Findings}
 
