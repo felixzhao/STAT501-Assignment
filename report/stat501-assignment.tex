@@ -262,6 +262,26 @@ $R^2$  of 0.6599 provides a slightly more conservative estimate of the model's e
 
 There is a significant negative relationship between a country's Human Development Index (HDI) and the level of interest. Specifically, as the HDI of a country increases, the level of interest tends to decrease. This model explains about 66.63\% of the variability in interest among the countries.
 
+
+\subsubsection{Regression Analysis: Effect of Support and Interest on Overall}
+\label{sss.supintvsoverall}
+
+To determine the relationship between the level of "Support" and "Interest" a country receives or exhibits and an overall metric (which could be an overall satisfaction, rating, or any other measure).
+A multiple linear regression model was employed:
+
+$\text{Overall} = -1.445 \times 10^{-15} + 0.2502 \times \text{Support} - 0.9964 \times \text{Interest} + \epsilon$
+
+
+The coefficient for Support is 0.2502. This indicates that for every unit increase in Support, the overall metric increases by 0.2502 units, on average, holding all else constant. However, the p-value for Support is 0.07782, which is slightly above the conventional 0.05 threshold for statistical significance. This suggests that the relationship between Support and Overall is suggestive but not strongly significant at the 5\% level.
+
+
+The coefficient for Interest is -0.9964, which is statistically significant with a p-value much less than 0.05. This means that for every unit increase in Interest, the overall metric decreases by 0.9964 units, on average, holding all else constant. The strong negative relationship suggests that as Interest increases, the overall metric tends to decrease.
+
+The $R^2$  value of 0.6537 indicates that approximately 65.37\% of the variability in the Overall metric can be explained by Support and Interest. The adjusted 
+$R^2$ of 0.6402 provides a slightly more conservative estimate of the model's explanatory power, accounting for the number of predictors.
+
+There is a suggestive positive relationship between Support and the Overall metric, though it's not strongly significant at the 5\% level. On the other hand, there is a significant negative relationship between Interest and the Overall metric. As Interest increases, the Overall metric tends to decrease. Together, Support and Interest explain about 65.37\% of the variability in the Overall metric among the countries.
+
 \section{Key Findings}
 
 Results of the statistical analysis.
