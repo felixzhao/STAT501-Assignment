@@ -1,0 +1,135 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```
+
+raw_path = '/Users/felix.zhao/Documents/others/501/assignment/STAT501-Assignment/data/raw.csv'
+
+```
+
+```{r}
+install.packages("mice")
+library(mice)
+```
+
+
+```{r}
+library(readr) 
+df <- read.csv(raw_path) 
+head(df)
+# drop all # 'Issues', 'Explain', 'Evidence', 'Interest', 'Support', 'Overall' nan
+df_cleaned <- subset(
+    df, !(
+            is.na(Issues) & 
+            is.na(Explain) &
+              is.na(Evidence) &
+              is.na(Interest) &
+              is.na(Support) &
+              is.na(Overall)
+        )
+    )
+```
+
+```{r}
+# 'Income', 'Health', 'Edu', 'HDI'
+df_cleaned <- subset(
+    df_cleaned, !(
+            is.na(Income) & 
+            is.na(Health) &
+              is.na(Edu) &
+              is.na(HDI)
+        )
+    )
+```
+
+
+```{r}
+install.packages("visdat")
+library(visdat)
+
+vis_miss(df)
+
+```
+```{r}
+vis_miss(df_cleaned)
+```
+
+```{r}
+install.packages("mice")
+library(mice)
+
+# Perform imputation
+imputed_data <- mice(df_cleaned, m=5, method='pmm', maxit = 50)
+
+# Extract one of the imputed datasets
+dataset_complete <- complete(imputed_data, 1)
+
+```
+
+```{r}
+write.csv(dataset_complete, "/Users/felix.zhao/Documents/others/501/assignment/STAT501-Assignment/data/complete_filtered_MPI_all_nan.csv", row.names = FALSE)
+
+```
+
+```{r}
+library(pander)
+library(dplyr)
+library(psych)
+```
+
+
+```{r}
+dataset_complete %>%
+dplyr::select(where(is.numeric)) %>% # select numerical variables only
+pairs.panels(method="spearman", # correlation method
+hist.col = "lightgreen", # histogram color
+density = TRUE, # show density plots
+ellipses = FALSE # do not show correlation ellipses
+)
+```
+```{r}
+dataset_complete %>%
+dplyr::select(Support, Interest, Income, HDI, Overall) %>%
+dplyr::select(where(is.numeric)) %>% # select numerical variables only
+pairs.panels(method="spearman", # correlation method
+hist.col = "lightgreen", # histogram color
+density = TRUE, # show density plots
+ellipses = FALSE # do not show correlation ellipses
+)
+```
+
+```{r}
+fit1<-lm(Support ~ Income, data=dataset_complete)
+pander(summary(fit1), caption="")
+```
+
+```{r}
+par(mfrow=c(2,2)) ##Places the next four graphs in a single window in a 2 x 2 configuration
+plot(fit1)
+```
+
+
+```{r}
+fit2<-lm(Interest ~ HDI, data=dataset_complete)
+pander(summary(fit2), caption="")
+```
+```{r}
+par(mfrow=c(2,2)) ##Places the next four graphs in a single window in a 2 x 2 configuration
+plot(fit2)
+```
+
+```{r}
+fit3<-lm(Overall ~ Support + Interest, data=dataset_complete)
+pander(summary(fit3), caption="")
+```
+```{r}
+par(mfrow=c(2,2)) ##Places the next four graphs in a single window in a 2 x 2 configuration
+plot(fit3)
+```
+
