@@ -53,24 +53,19 @@ School of Mathematics and Statistics\\ Victoria University of Wellington, New Ze
 \maketitle
 
 \begin{abstract}
-  This course provides students with an opportunity to develop their
-  research skills in Mathematics and Statistics, including use of
-  library resources, constructing literature reviews, developing
-  research questions, writing research proposals, and developing
-  skills in oral presentation. The template file gives an introduction
-  to LaTeX,
+  This study delves into the intricate relationship between students' interest and aptitude in science and the overall development of their respective countries, using data from the Programme for International Student Assessment (PISA) and the Human Development Index (HDI). Through correlation and regression analyses of data from 54 countries, we found that higher Human Development and income levels do not necessarily translate to increased support or interest in science. Specifically, countries with lower HDI values tend to exhibit a stronger interest in science. The Netherlands, despite its economic prosperity, offers comparatively lower support for science, while Finland, with its high HDI, displays reduced student interest in the subject. These findings challenge the prevailing assumption that affluence and development invariably foster greater support and interest in science. The study underscores the need for individual countries, especially those like the Netherlands and Finland, to re-evaluate their science education strategies and funding mechanisms. Future research is recommended to explore the cultural and societal nuances influencing these trends.
 \end{abstract}
 
 
-% Table of Contents
-\tableofcontents
+% % Table of Contents
+% \tableofcontents
 
 
-\setlength{\baselineskip}{0.25in} % min space from bottom of one line
+% \setlength{\baselineskip}{0.25in} % min space from bottom of one line
 
-                                 % to top of next in a paragraph
+%                                  % to top of next in a paragraph
 
-                                 % place after \begin{document}
+%                                  % place after \begin{document}
 
 
 
@@ -147,60 +142,56 @@ By adhering to these objectives and scope, we aim to provide a robust analysis t
 
 \section{Data Description}
 
-% # Sources of data.
-% # Description of variables.
-% # Data collection methods.
-% # Data quality and validation procedures.
-
 \subsection{Programme for International Student Assessment (PISA)}
 
-\label{ss.pisa}
-PISA is the OECD's Programme for International Student Assessment. PISA measures 15-year-olds’ ability to use their reading, mathematics and science knowledge and skills to meet real-life challenges.
+The Programme for International Student Assessment (PISA) is an initiative by the OECD to evaluate the knowledge and skills of 15-year-old students worldwide. PISA assesses the ability of these students to apply their reading, mathematics, and science knowledge to real-world challenges.
 
-We involved, Overall Science Score (average score for 15 year olds),  Interest in science, Support for scientific inquiry, etc. 
+In our analysis, we have incorporated several metrics from PISA, including:
+\begin{itemize}
+\item Overall Science Score: This represents the average score of 15-year-olds in science.
+\item Interest in Science: A measure of students' enthusiasm and curiosity towards scientific topics.
+\item Support for Scientific Inquiry: This metric gauges the encouragement and resources provided to students for exploring scientific concepts.
+\end{itemize}
 
 \subsection{Human Development Index (HDI)}
 
-\label{ss.hdi}
-Human Development Index (HDI)The HDI is a summary measure for assessing long-term progress in three basic dimensions of human development: a long and healthy life, access to knowledge and a decent standard of living.
+The Human Development Index (HDI) is a composite measure designed to evaluate long-term progress in three fundamental dimensions of human development:
+\begin{itemize}
+\item A long and healthy life.
+\item Access to knowledge.
+\item A decent standard of living.
+\end{itemize}
 
-In this work, we involved Income Index, Health Index, Education Index and Overall Human Development Index.
-
-\section{Preliminary Data Analysis}
-
-% Descriptive statistics.
-% Data visualization.
-% Identification of outliers or anomalies.
-
-This Dataset has 64 country level summarise data.
+For the purpose of this study, we have incorporated the following components from the HDI:
+\begin{itemize}
+\item Income Index: Represents the economic capability of individuals in a country.
+\item Health Index: A measure of the overall health and longevity of the population.
+\item Education Index: Evaluates the access to and quality of education in a country.
+\item Overall Human Development Index: The composite score that combines all the above dimensions.
+\end{itemize}
 
 
 \subsection{Data Imputation}
 \label{ss.imputation}
 
-In Figure $\ref{fig:missing}$ (a) shows the missing data info in raw data.
-As PISA and HDI do not have correlation relationship, 
-thus we do not keep rows which all PISA info or all HDI info missed.
+Figure $\ref{fig:missing}$ (a) illustrates the presence of missing data in our initial dataset. Given that there is no direct correlation between PISA and HDI data, we opted to exclude rows where either all PISA-related information or all HDI-related information was absent.
 
-In Figure $\ref{fig:missing}$ (b) shows the missing info after filter.
-There are 54 country level observisons left.
+Following this filtration process, Figure $\ref{fig:missing}$ (b) presents the status of the dataset with respect to missing values. Post-filtering, we retained data for 54 countries.
 
-We replace missing values by R MICE \cite{mice_package} "predictive mean matching" (PMM) approach.
+To address the remaining missing values, we employed the "predictive mean matching" (PMM) method from the R MICE package \cite{mice_package}. This approach allows for a more robust imputation by leveraging the relationships between variables to predict missing values.
 
-
-\label{ss.imputataion}
 
 \begin{figure}[htb]
   \begin{minipage}[b]{1.0\linewidth}
     \centering
-    \centerline{\includegraphics[width=7.0cm]{images/null_1}}
+    \centerline{\includegraphics[width=10.0cm]{images/null_1}}
   %  \vspace{1.5cm}
     \centerline{(a) raw data}\medskip
   \end{minipage}
   \hfill
   \begin{minipage}[b]{1.0\linewidth}
     \centering
-    \centerline{\includegraphics[width=7.0cm]{images/null_2}}
+    \centerline{\includegraphics[width=10.0cm]{images/null_2}}
   %  \vspace{1.5cm}
     \centerline{(b) remove missing }\medskip
   \end{minipage}
@@ -210,150 +201,152 @@ We replace missing values by R MICE \cite{mice_package} "predictive mean matchin
   %
   \end{figure}
 
+  \subsection{Top 10 Countries in PISA Overall}
+  \label{ss.top10}
 
-\section{Statistical Models and Techniques Used}
-% Statistical tests conducted.
-% Models fitted to the data.
-% Model validation techniques.
+  Fig $\ref{fig:top10}$ shows the 10 highest PISA overall score countries.
 
-\subsection{Correlation Analysis}
-\label{ss.corr}
+  \begin{figure}[htb]
+    \centering
+    \includegraphics[width=\linewidth]{images/top10}
+    \caption{TOP 10 Overall Countries}
+    \label{fig:top10}
+    \end{figure}
 
-In Fig $\ref{fig:corr}$ shows all variable in linear correlation.
-Income shows negative correlation to Support,
-HDI shows negative correlation to interest,
-and both Support and interest shows negative collection to Overall Score.
+  \section{Statistical Models and Techniques Used}
 
-
-\begin{figure}[htb]
+  \subsection{Correlation Analysis}
+  \label{ss.corr}
+  
+  Figure $\ref{fig:corr}$ presents the linear correlations among the variables. Notably:
+  \begin{itemize}
+  \item Income is negatively correlated with Support.
+  \item HDI displays a negative correlation with Interest.
+  \item Both Support and Interest are negatively correlated with the Overall Score.
+  \end{itemize}
+  
+  \begin{figure}[htb]
   \centering
   \includegraphics[width=\linewidth]{images/corr}
-  \caption{Visualize Missing Data}
+  \caption{Correlation Analysis of Variables}
   \label{fig:corr}
-\end{figure}
-
-
-\subsection{regression Analysis}
-\label{ss.reg}
-
-\subsubsection{wealthier (higher income) countries and Support of Science}
-\label{sss.incvssup}
-
-To determine the relationship between a country's wealth (as indicated by its income) and the support it provides, we employed a linear regression analysis. The dependent variable in our model was "Support", and the independent variable was "Income". The model can be represented as:
+  \end{figure}
+  
+  \subsection{Regression Analysis}
+  \label{ss.reg}
+  
+  \subsubsection{Relationship between Wealth and Support for Science}
+  \label{sss.incvssup}
+  
+  We utilized linear regression to ascertain the relationship between a country's wealth (represented by Income) and its support for science. The model is expressed as:
 
 $\text{Support} = -1.662 \times 10^{-16} - 0.4773 \times \text{Income} + \epsilon$
 
-The model has an $R^2$ value of 0.2278, indicating that approximately 22.78\% of the variation in support can be explained by the country's income. The adjusted  $R^2$ is 0.213, which takes into account the number of predictors in the model and provides a more accurate representation of the model's explanatory power.
+The model's $R^2$ value of 0.2278 suggests that approximately 22.78\% of the variance in Support is explained by Income. The adjusted $R^2$ is 0.213, providing a more nuanced measure of the model's fit.
 
-The results suggest that wealthier countries (with higher income) tend to provide less support. The negative coefficient for Income indicates that for every unit increase in income, the support decreases by 0.4773 units, on average, holding all else constant. The statistical significance of the coefficient (p-value < 0.05) provides evidence to reject the null hypothesis that income has no effect on support.
+The negative coefficient for Income implies that as income rises, support tends to decrease by 0.4773 units, all else being equal. The coefficient's statistical significance ($p-value < 0.05$) underscores the influence of income on support.
 
-
-\subsubsection{Regression Analysis: Effect of HDI on Interest}
+\subsubsection{Impact of HDI on Interest}
 \label{sss.hdivsint}
 
-To determine the relationship between a country's Human Development Index (HDI) and the level of interest (perhaps in a particular policy, investment, or other context). A simple linear regression model was used:
+To discern the influence of a country's HDI on its level of interest, we employed a simple linear regression:
 
 $\text{Interest} = -9.748 \times 10^{-16} - 0.8163 \times \text{HDI} + \epsilon$
 
-The coefficient for HDI is -0.8163, which is statistically significant with a p-value much less than 0.05. This indicates that for every unit increase in HDI, the interest decreases by 0.8163 units, on average, holding all else constant. The strong negative relationship suggests that as countries have a higher Human Development Index, the level of interest tends to decrease.
+The coefficient for HDI, -0.8163, is statistically significant ($p-value < 0.05$). This suggests that as HDI increases, interest decreases by 0.8163 units, all else being constant. The model's $R^2$ value of 0.6663 indicates that HDI explains approximately 66.63\% of the variance in Interest.
 
-The $R^2$  value of 0.6663 indicates that approximately 66.63\% of the variability in Interest can be explained by the HDI. The adjusted 
-$R^2$  of 0.6599 provides a slightly more conservative estimate of the model's explanatory power, accounting for the number of predictors.
-
-There is a significant negative relationship between a country's Human Development Index (HDI) and the level of interest. Specifically, as the HDI of a country increases, the level of interest tends to decrease. This model explains about 66.63\% of the variability in interest among the countries.
-
-
-\subsubsection{Regression Analysis: Effect of Support and Interest on Overall}
+\subsubsection{Influence of Support and Interest on Overall Score}
 \label{sss.supintvsoverall}
 
-To determine the relationship between the level of "Support" and "Interest" a country receives or exhibits and an overall metric (which could be an overall satisfaction, rating, or any other measure).
-A multiple linear regression model was employed:
+To understand how Support and Interest influence the Overall Score, we used multiple linear regression:
 
 $\text{Overall} = -1.445 \times 10^{-15} + 0.2502 \times \text{Support} - 0.9964 \times \text{Interest} + \epsilon$
 
 
-The coefficient for Support is 0.2502. This indicates that for every unit increase in Support, the overall metric increases by 0.2502 units, on average, holding all else constant. However, the p-value for Support is 0.07782, which is slightly above the conventional 0.05 threshold for statistical significance. This suggests that the relationship between Support and Overall is suggestive but not strongly significant at the 5\% level.
+The coefficient for Support, 0.2502, suggests a unit increase in Support corresponds to a 0.2502 unit increase in the Overall Score, with other factors held constant. However, its p-value of 0.07782 slightly exceeds the 0.05 threshold, indicating a potential relationship that isn't robustly significant.
 
+Conversely, the coefficient for Interest, -0.9964, is statistically significant ($p-value < 0.05$), implying a unit increase in Interest leads to a decrease of 0.9964 units in the Overall Score, all else being constant.
 
-The coefficient for Interest is -0.9964, which is statistically significant with a p-value much less than 0.05. This means that for every unit increase in Interest, the overall metric decreases by 0.9964 units, on average, holding all else constant. The strong negative relationship suggests that as Interest increases, the overall metric tends to decrease.
-
-The $R^2$  value of 0.6537 indicates that approximately 65.37\% of the variability in the Overall metric can be explained by Support and Interest. The adjusted 
-$R^2$ of 0.6402 provides a slightly more conservative estimate of the model's explanatory power, accounting for the number of predictors.
-
-There is a suggestive positive relationship between Support and the Overall metric, though it's not strongly significant at the 5\% level. On the other hand, there is a significant negative relationship between Interest and the Overall metric. As Interest increases, the Overall metric tends to decrease. Together, Support and Interest explain about 65.37\% of the variability in the Overall metric among the countries.
+The model's $R^2$ value of 0.6537 suggests that Support and Interest together explain approximately 65.37\% of the variance in the Overall Score.
 
 \section{Key Findings}
 
-%Results of the statistical analysis.
-%Interpretation of these results in context.
+Our statistical analyses, encompassing both correlation and regression, revealed linear relationships among the variables of interest. Specifically:
 
-In correlation and regression analysis, we found the variables which we are interested in are have linear relationship.
-We can say, HDI has a negative effect on interest, Income has a negative effect to Support.
-And Support have positive effect to Overall, but Interest has negative effect to it.
+\begin{itemize}
+\item HDI exerts a negative influence on Interest.
+\item Income negatively impacts Support.
+\item While Support positively affects the Overall Score, Interest has a detrimental effect on it.
+\end{itemize}
 
-After we jump into country level analysis with standardlized all variables. 
+Upon delving into a country-specific analysis with standardized variables:
 
-Fig $\ref{fig:inc_sup}$ shows the Support do no have significance difference, which is approved the related model only have 22 precetage explliantion.
-But, "Netherlands" have a abonormal Support score based on the income trend in countries level.
+\subsection{Income vs Support by Countries}
 
-
-\begin{figure}[htb]
-  \centering
-  \includegraphics[width=\linewidth]{images/income_support_by_country}
-  \caption{Income vs Support by Countries}
-  \label{fig:inc_sup}
-\end{figure}
-
-% HDI $->$ Interest
-
-Fig $\ref{fig:hdi_int}$ shows Lower HDI countries intend to have high interest in Science.
-But, "United Kindom", and "Finland" are unique compare with the trend in countries level.
+As depicted in Figure $\ref{fig:inc_sup}$, there isn't a significant difference in Support across countries, corroborating our earlier model that explained only 22% of the variance. However, the Netherlands stands out with an anomalous Support score when juxtaposed against the income trend at the country level.
 
 \begin{figure}[htb]
-  \centering
-  \includegraphics[width=\linewidth]{images/hdi_interest_by_country}
-  \caption{HDI vs Interest by Countries}
-  \label{fig:hdi_int}
+\centering
+\includegraphics[width=\linewidth]{images/income_support_by_country}
+\caption{Income vs Support by Countries}
+\label{fig:inc_sup}
 \end{figure}
 
-% Support, Interest -> Overall
-Fig $\ref{fig:int_sup_overall}$ shows the lower Overall Score comes under area around 0.6 < Interest  < 0.7 and 0.4 < Support < 0.7.
-And "Netherlands" and "Japan" shows unique pattern compare with the trend.
+\subsection{HDI vs Interest by Countries}
+
+Figure $\ref{fig:hdi_int}$ illustrates that countries with a lower HDI tend to exhibit a heightened interest in Science. Yet, the United Kingdom and Finland deviate from this general trend, presenting unique patterns at the country level.
 
 \begin{figure}[htb]
-  \centering
-  \includegraphics[width=\linewidth]{images/interest_support_vs_overall}
-  \caption{Support vs Overall by Countries}
-  \label{fig:int_sup_overall}
+\centering
+\includegraphics[width=\linewidth]{images/hdi_interest_by_country}
+\caption{HDI vs Interest by Countries}
+\label{fig:hdi_int}
 \end{figure}
+
+\subsection{Support and Interest vs Overall Score}
+
+Figure $\ref{fig:int_sup_overall}$ indicates that lower Overall Scores predominantly fall within the range where 
+$0.6 < Interest < 0.7$ and 
+$0.4 < Support < 0.7$. 
+Notably, both the Netherlands and Japan diverge from this trend, showcasing distinct patterns.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=\linewidth]{images/interest_support_vs_overall}
+\caption{Support and Interest vs Overall Score by Countries}
+\label{fig:int_sup_overall}
+\end{figure}
+
+
 
 \section{Recommendations and Future Research}
 
-Based on the analysis and finding, 
-The support of science in "Netherlands" in too low compare with similar income country.
-May analysis work may be needed to figure the reason. we suggest their government may need to give more funding to support science related works.
+\subsection{Recommendations}
 
-"Finland" compare with other similar Human Development level countries shows science interest is too low.
-We suggest give more investigation in anlaysis the reason of low interst in science for their students.
+\begin{itemize}
+\item \textbf{Netherlands:} Our analysis indicates that the support for science in the Netherlands is considerably lower compared to countries with similar income levels. We recommend that the Dutch government consider allocating additional funding to bolster science-related initiatives and programs. A deeper investigation may be warranted to pinpoint the underlying reasons for this discrepancy.
 
-% \section{Limitations and Future Research}
+\item \textbf{Finland:} In comparison to nations with analogous Human Development levels, Finland exhibits a notably diminished interest in science among its students. It would be prudent for educational stakeholders in Finland to delve deeper into the root causes of this reduced interest. Initiatives aimed at reigniting students' passion for science might be beneficial.
+\end{itemize}
 
-% Limitations in data or methodology.
-% Recommendations for future research.
+\subsection{Future Research}
+
+Future research endeavors could focus on:
+\begin{itemize}
+\item Conducting qualitative studies in countries like the Netherlands and Finland to gain insights into the specific factors affecting science support and interest, respectively.
+
+\item Exploring the potential cultural, societal, or educational system differences that might influence students' attitudes towards science in various countries.
+
+\item Investigating the role of external factors, such as media portrayal of science, in shaping students' perceptions and interests.
+\end{itemize}
 
 \section{Conclusions}
 
-% Final summary and conclusions drawn from the statistical analysis.
-Many people assume that students from wealthy countries receive better support in science and are more interested in science. However, our research found that this is not the case. 
-After analysis 54 countries data, we found low Human Development countries tend to higher interest in science.
-It may be that the comfortable life of students in wealthy countries reduces their interest in scientific exploration.
+A prevailing assumption is that students hailing from affluent nations benefit from superior support in science and manifest a heightened interest in the subject. Contrary to this belief, our research, encompassing data from 54 countries, reveals that nations with lower Human Development Indices often exhibit a stronger interest in science. This suggests that the relative affluence and comfort experienced by students in wealthier countries might inadvertently dampen their curiosity and drive for scientific exploration.
 
-Similar negative effect also comes from country Income to Support of science. But the difference between country not significant.
+The relationship between a country's income and its support for science also follows a similar trend, albeit the differences among countries aren't pronounced.
 
-For individual country, Netherlands and Finland deserve special attention,
- the former show extremely support compare with other similar income countries
-  and the latter's students shows lower interest in science compare with other similar Human Development countries.
-% end of structure
+On a country-specific note, the Netherlands and Finland warrant special attention. The Netherlands, despite its economic stature, lags in science support when juxtaposed against its income counterparts. Conversely, Finland, despite its commendable Human Development standing, grapples with a diminished student interest in science. These findings underscore the intricate interplay of economic, developmental, and educational factors in shaping a nation's scientific landscape.
 
 \newpage
 %
