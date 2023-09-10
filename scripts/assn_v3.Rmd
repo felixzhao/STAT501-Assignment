@@ -1,0 +1,418 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```
+
+raw_path = '/Users/felix.zhao/Documents/others/501/assignment/STAT501-Assignment/data/raw.csv'
+
+```
+
+```{r}
+install.packages("mice")
+library(mice)
+install.packages("ggplot2")
+library(ggplot2)
+install.packages("dplyr")
+library(dplyr)
+
+```
+
+
+```{r}
+library(readr) 
+df <- read.csv(raw_path) 
+head(df)
+# drop all # 'Issues', 'Explain', 'Evidence', 'Interest', 'Support', 'Overall' nan
+df_cleaned <- subset(
+    df, !(
+            is.na(Issues) & 
+            is.na(Explain) &
+              is.na(Evidence) &
+              is.na(Interest) &
+              is.na(Support) &
+              is.na(Overall)
+        )
+    )
+```
+```{r}
+summary(df)
+
+```
+
+
+```{r}
+# 'Income', 'Health', 'Edu', 'HDI'
+df_cleaned <- subset(
+    df_cleaned, !(
+            is.na(Income) & 
+            is.na(Health) &
+              is.na(Edu) &
+              is.na(HDI)
+        )
+    )
+```
+
+
+```{r}
+install.packages("visdat")
+library(visdat)
+
+vis_miss(df)
+
+```
+```{r}
+vis_miss(df_cleaned)
+```
+
+```{r}
+install.packages("mice")
+library(mice)
+
+# Perform imputation
+imputed_data <- mice(df_cleaned, m=5, method='pmm', maxit = 50)
+
+# Extract one of the imputed datasets
+dataset_complete <- complete(imputed_data, 1)
+
+```
+
+# EDA
+
+```{r}
+summary(dataset_complete)
+```
+
+```{r}
+
+data_sorted <- dataset_complete %>% arrange(Interest)
+
+data_sorted$Country <- with(data_sorted, reorder(Country, -Interest))
+
+
+ggplot(data_sorted, aes(x = Country, y = Interest, size = Interest)) +
+  geom_point(alpha = 0.7) +
+  labs(title = "Index by Country", x = "Country", y = "Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+```{r}
+install.packages(c("rgl", "plot3D"))
+library(rgl)
+library(plot3D)
+
+```
+```{r}
+with(data_sorted, scatter3D(Interest, Support, seq_along(Country), 
+                     colvar = NULL, pch = 19, 
+                     xlab = "Index", ylab = "Support", zlab = "Country",
+                     ticktype = "detailed", 
+                     theta = 45, phi = 25, expand = 0.5))
+
+```
+```{r fig.width=10, fig.height=6}
+#with(data_sorted, plot3d(Interest, Support, seq_along(Country), 
+#                  type = "s", col = "blue", size = 1,
+#                  xlab = "Interest", ylab = "Support", zlab = "Country"))
+
+# Add country names as text labels
+#with(data_sorted, text3d(Interest, Support, seq_along(Country), texts = Country, pos = 4))
+
+ggplot(data_sorted, aes(x = Income, y = Support, label = Country)) +
+  geom_point(aes(color = Country), size = 3) +
+  geom_text(aes(label = Country), vjust = 1.5, hjust = 1.5) +
+  labs(title = "Support vs. Income", x = "Income", y = "Support") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+
+```
+```{r fig.width=20, fig.height=6}
+data_sorted <- dataset_complete %>% arrange(Income)
+
+data_sorted$Country <- with(data_sorted, reorder(Country, Income))
+ggplot(data_sorted, aes(x = Country, y = Income)) +
+  geom_point(aes(size = Support, color = Support), alpha = 0.7) +
+  scale_size_continuous(name = "Support") +
+  scale_color_gradient(name = "Support", low = "blue", high = "red") +
+  labs(title = "Income by Country", x = "Country", y = "Income") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  #legend.position = "right")
+
+```
+
+
+
+
+```{r}
+# Load necessary libraries
+install.packages("ggplot2")
+library(ggplot2)
+
+# Boxplot for columns with values in range 100 to 500
+ggplot(dataset_complete, aes(x = factor(0), y = Issues)) + 
+  geom_boxplot() +
+  labs(title = "Boxplot for Issues", x = NULL, y = "Value") +
+  theme_minimal()
+
+ggplot(dataset_complete, aes(x = factor(0), y = Explain)) + 
+  geom_boxplot() +
+  labs(title = "Boxplot for Explain", x = NULL, y = "Value") +
+  theme_minimal()
+
+# Similarly, you can create boxplots for other columns by replacing 'col1' with the desired column name.
+
+# Load necessary libraries
+install.packages("tidyr")
+library(tidyr)
+
+# Standardize all columns except 'country'
+cols_to_standardize <- setdiff(names(df), "Country")
+
+df[cols_to_standardize] <- lapply(df[cols_to_standardize], scale)
+
+# Convert the dataframe from wide to long format
+df_long <- dataset_complete %>% 
+  gather(key = "Variable", value = "Value", -Country)
+
+ggplot(df_long, aes(x = Variable, y = Value)) + 
+  geom_boxplot() +
+  labs(title = "Boxplots for All Columns", x = NULL, y = "Value") +
+  theme_minimal()
+
+
+```
+
+```{r}
+library(ggplot2)
+library(tidyr)
+
+df = dataset_complete
+
+# Standardize all columns except 'country'
+#cols_to_standardize <- setdiff(names(df), "Country")
+
+#df[cols_to_standardize] <- lapply(df[cols_to_standardize], scale)
+
+# Define a function to scale between 0 and 1
+min_max_scale <- function(x) {
+  (x - min(x)) / (max(x) - min(x))
+}
+
+# Standardize all columns except 'Country'
+cols_to_standardize <- setdiff(names(df), "Country")
+
+df[cols_to_standardize] <- lapply(df[cols_to_standardize], min_max_scale)
+
+df_long <- df %>% 
+  gather(key = "Variable", value = "Value", -Country)
+
+ggplot(df_long, aes(x = Variable, y = Value)) + 
+  geom_boxplot() +
+  labs(title = "Boxplots for Standardized Columns", x = NULL, y = "Standardized Value") +
+  theme_minimal()
+```
+
+```{r}
+df
+```
+```{r fig.width=20, fig.height=12}
+ggplot(df, aes(x = Interest, y = Support, size = Overall, label = Country)) +
+  geom_point(aes(color = Overall), alpha = 0.7) +
+  geom_text(aes(label = Country), vjust = 1.5, hjust = 1.5, size = 3) +
+  scale_size_continuous(range = c(3, 15)) +  # Adjust point sizes
+  labs(title = "Support vs. Interest", x = "Interest", y = "Support") +
+  #theme_minimal() +
+  theme(legend.position = "none")
+
+```
+```{r fig.width=20, fig.height=12}
+library(ggplot2)
+
+ggplot(df, aes(x = Interest, y = Support, size = Overall, label = Country)) +
+  geom_point(aes(color = Overall), alpha = 0.7) +
+  geom_text(aes(label = Country), vjust = 1.5, hjust = 1.5, size = 3) +
+  scale_size_continuous(range = c(3, 15), name = "Overall Value") +  # Adjust point sizes and legend title
+  labs(title = "Support vs. Interest", x = "Interest", y = "Support") +
+  theme_minimal()
+
+```
+
+```{r fig.width=20, fig.height=6}
+data_sorted <- df %>% arrange(Income)
+
+data_sorted$Country <- with(data_sorted, reorder(Country, Income))
+plot <- ggplot(data_sorted, aes(x = Country, y = Income)) +
+  geom_point(aes(size = Support, color = Support), alpha = 0.7) +
+  scale_size_continuous(name = "Support") +
+  scale_color_gradient(name = "Support", low = "blue", high = "red") +
+  labs(title = "Income by Country", x = "Country", y = "Income") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+print(plot)
+
+ggsave("income_support_by_country.png", plot = plot, width = 20, height = 6, dpi = 300)
+print(plot)
+
+```
+
+```{r fig.width=20, fig.height=6}
+data_sorted <- df %>% arrange(HDI)
+
+data_sorted$Country <- with(data_sorted, reorder(Country, HDI))
+plot <- ggplot(data_sorted, aes(x = Country, y = HDI)) +
+  geom_point(aes(size = Interest, color = Interest), alpha = 0.7) +
+  scale_size_continuous(name = "Interest") +
+  scale_color_gradient(name = "Interest", low = "blue", high = "red") +
+  labs(title = "HDI by Country", x = "Country", y = "HDI") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+print(plot)
+
+ggsave("hdi_interest_by_country.png", plot = plot, width = 20, height = 6, dpi = 300)
+print(plot)
+
+```
+```{r}
+head(data_sorted)
+```
+
+```{r fig.width=20, fig.height=6}
+data_sorted <- df %>% arrange(Overall)
+
+data_sorted$Country <- with(data_sorted, reorder(Country, Support))
+plot <- ggplot(data_sorted, aes(x = Country, y = Support)) +
+  geom_point(aes(size = Overall, color = Overall), alpha = 0.7) +
+  scale_size_continuous(name = "Overall") +
+  scale_color_gradient(name = "Overall", low = "blue", high = "red") +
+  labs(title = "Support by Country", x = "Country", y = "Support") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+print(plot)
+
+ggsave("overall_support_by_country.png", plot = plot, width = 20, height = 6, dpi = 300)
+print(plot)
+
+```
+
+```{r fig.width=20, fig.height=6}
+data_sorted <- df %>% arrange(Overall)
+
+data_sorted$Country <- with(data_sorted, reorder(Country, Interest))
+plot <- ggplot(data_sorted, aes(x = Country, y = Interest)) +
+  geom_point(aes(size = Overall, color = Overall), alpha = 0.7) +
+  scale_size_continuous(name = "Overall") +
+  scale_color_gradient(name = "Overall", low = "blue", high = "red") +
+  labs(title = "Interest by Country", x = "Country", y = "Interest") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+print(plot)
+
+ggsave("overall_interest_by_country.png", plot = plot, width = 20, height = 6, dpi = 300)
+print(plot)
+
+```
+
+```{r fig.width=20, fig.height=6}
+install.packages("plotly")
+library(plotly)
+
+df$Overall <- as.numeric(df$Overall)
+data_sorted <- df %>% arrange(Overall)
+
+data_sorted$Country <- with(data_sorted, reorder(Country, Overall))
+
+plot_ly(data_sorted, x = ~Country, y = ~Support, z = ~Interest, text = ~Country,
+        size = ~Overall, #, color = ~Overall, colors = c('blue', 'red'),
+        marker = list(sizemode = 'diameter'),
+        type = 'scatter3d', mode = 'markers', 
+        marker = list(line = list(width = 0))) %>%
+  layout(title = "3D Scatter Plot of Index, HDI, and Support",
+         scene = list(xaxis = list(title = "Country"),
+                      yaxis = list(title = "Index"),
+                      zaxis = list(title = "HDI")))
+
+```
+
+
+
+# CORR
+
+```{r}
+write.csv(dataset_complete, "/Users/felix.zhao/Documents/others/501/assignment/STAT501-Assignment/data/complete_filtered_MPI_all_nan.csv", row.names = FALSE)
+
+```
+
+```{r}
+library(pander)
+library(dplyr)
+library(psych)
+```
+
+
+```{r}
+df %>%
+dplyr::select(where(is.numeric)) %>% # select numerical variables only
+pairs.panels(method="spearman", # correlation method
+hist.col = "lightgreen", # histogram color
+density = TRUE, # show density plots
+ellipses = FALSE # do not show correlation ellipses
+)
+```
+```{r}
+df %>%
+dplyr::select(Support, Interest, Income, HDI, Overall) %>%
+dplyr::select(where(is.numeric)) %>% # select numerical variables only
+pairs.panels(method="spearman", # correlation method
+hist.col = "lightgreen", # histogram color
+density = TRUE, # show density plots
+ellipses = FALSE # do not show correlation ellipses
+)
+```
+
+```{r}
+fit1<-lm(Support ~ Income, data=df)
+pander(summary(fit1), caption="")
+```
+
+```{r}
+par(mfrow=c(2,2)) ##Places the next four graphs in a single window in a 2 x 2 configuration
+plot(fit1)
+```
+
+
+```{r}
+fit2<-lm(Interest ~ HDI, data=df)
+pander(summary(fit2), caption="")
+```
+```{r}
+par(mfrow=c(2,2)) ##Places the next four graphs in a single window in a 2 x 2 configuration
+plot(fit2)
+```
+
+```{r}
+fit3<-lm(Overall ~ Support + Interest, data=df)
+pander(summary(fit3), caption="")
+```
+```{r}
+par(mfrow=c(2,2)) ##Places the next four graphs in a single window in a 2 x 2 configuration
+plot(fit3)
+```
+model selection
+
+```{r}
+
+# 'Country', 'Issues', 'Explain', 'Evidence', 'Interest', 'Support',
+#       'Income', 'Health', 'Edu', 'HDI', 'Overall'
+
+fit5<-lm(Overall ~Issues+Explain+Evidence+Interest+Support+Income+Health+Edu+HDI, data=df)
+pander(summary(fit5), caption="")
+
+```

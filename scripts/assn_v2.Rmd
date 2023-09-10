@@ -161,7 +161,7 @@ library(psych)
 
 
 ```{r}
-dataset_complete %>%
+df %>%
 dplyr::select(where(is.numeric)) %>% # select numerical variables only
 pairs.panels(method="spearman", # correlation method
 hist.col = "lightgreen", # histogram color
@@ -170,7 +170,7 @@ ellipses = FALSE # do not show correlation ellipses
 )
 ```
 ```{r}
-dataset_complete %>%
+df %>%
 dplyr::select(Support, Interest, Income, HDI, Overall) %>%
 dplyr::select(where(is.numeric)) %>% # select numerical variables only
 pairs.panels(method="spearman", # correlation method
@@ -181,7 +181,7 @@ ellipses = FALSE # do not show correlation ellipses
 ```
 
 ```{r}
-fit1<-lm(Support ~ Income, data=dataset_complete)
+fit1<-lm(Support ~ Income, data=df)
 pander(summary(fit1), caption="")
 ```
 
@@ -192,7 +192,7 @@ plot(fit1)
 
 
 ```{r}
-fit2<-lm(Interest ~ HDI, data=dataset_complete)
+fit2<-lm(Interest ~ HDI, data=df)
 pander(summary(fit2), caption="")
 ```
 ```{r}
@@ -201,7 +201,7 @@ plot(fit2)
 ```
 
 ```{r}
-fit3<-lm(Overall ~ Support + Interest, data=dataset_complete)
+fit3<-lm(Overall ~ Support + Interest, data=df)
 pander(summary(fit3), caption="")
 ```
 ```{r}
@@ -215,7 +215,7 @@ model selection
 # 'Country', 'Issues', 'Explain', 'Evidence', 'Interest', 'Support',
 #       'Income', 'Health', 'Edu', 'HDI', 'Overall'
 
-fit5<-lm(Overall ~Issues+Explain+Evidence+Interest+Support+Income+Health+Edu+HDI, data=dataset_complete)
+fit5<-lm(Overall ~Issues+Explain+Evidence+Interest+Support+Income+Health+Edu+HDI, data=df)
 pander(summary(fit5), caption="")
 
 ```
