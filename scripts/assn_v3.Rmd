@@ -223,6 +223,20 @@ ggplot(df_long, aes(x = Variable, y = Value)) +
 ```{r}
 df
 ```
+```{r}
+install.packages("tidyverse")
+library(tidyverse)
+
+top_10_countries <- df %>%
+  arrange(desc(Overall)) %>%
+  head(10) %>%
+  select(Country, Overall)
+
+print(top_10_countries)
+
+
+```
+
 ```{r fig.width=20, fig.height=12}
 ggplot(df, aes(x = Interest, y = Support, size = Overall, label = Country)) +
   geom_point(aes(color = Overall), alpha = 0.7) +
