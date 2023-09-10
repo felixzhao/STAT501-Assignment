@@ -81,7 +81,7 @@ School of Mathematics and Statistics\\ Victoria University of Wellington, New Ze
 
 The relationship between students' interest and aptitude in science and the overall development of countries on a global scale is a subject that is both fascinating and deserving of in-depth analysis. Understanding this relationship can offer valuable insights into the educational, economic, and social fabric of nations.
 
-In this comprehensive study, we aim to shed light on this complex issue by conducting a rigorous statistical analysis at the national level. To achieve this, we have integrated multiple data sources, including the Programme for International Student Assessment (PISA) and the Human Development Index (HDI) from United Nations data. PISA provides a robust measure of 15-year-old students' science literacy, while the HDI offers a composite index of life expectancy, education, and per capita income indicators, which are used to rank countries into tiers of human development.
+In this comprehensive study, we aim to shed light on this complex issue by conducting a rigorous statistical analysis at the national level. To achieve this, we have integrated multiple data sources, including the Programme for International Student Assessment (PISA) \cite{oecd_pisa_2016} and the Human Development Index (HDI) \cite{undp_hdi_2021} from United Nations data. PISA provides a robust measure of 15-year-old students' science literacy, while the HDI offers a composite index of life expectancy, education, and per capita income indicators, which are used to rank countries into tiers of human development.
 
 Our primary objective is to offer a high-level overview that elucidates the relationship between students' scientific capabilities and interests and their country's level of development. By doing so, we aim to identify key issues that may be hindering progress in both educational and developmental sectors. Furthermore, our analysis serves as a foundation for proposing actionable solutions that could be implemented to improve educational outcomes and, by extension, the overall well-being of nations.
 
@@ -185,7 +185,7 @@ thus we do not keep rows which all PISA info or all HDI info missed.
 In Figure $\ref{fig:missing}$ (b) shows the missing info after filter.
 There are 54 country level observisons left.
 
-We replace missing values by R MICE "predictive mean matching" (PMM) approach.
+We replace missing values by R MICE \cite{mice_package} "predictive mean matching" (PMM) approach.
 
 
 \label{ss.imputataion}
