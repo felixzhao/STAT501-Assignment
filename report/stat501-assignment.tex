@@ -287,7 +287,16 @@ There is a suggestive positive relationship between Support and the Overall metr
 %Results of the statistical analysis.
 %Interpretation of these results in context.
 
-Income $->$ Support
+In correlation and regression analysis, we found the variables which we are interested in are have linear relationship.
+We can say, HDI has a negative effect on interest, Income has a negative effect to Support.
+And Support have positive effect to Overall, but Interest has negative effect to it.
+
+After we jump into country level analysis with standardlized all variables. 
+
+Fig $\ref{fig:inc_sup}$ shows the Support do no have significance difference, which is approved the related model only have 22 precetage explliantion.
+But, "Netherlands" have a abonormal Support score based on the income trend in countries level.
+
+
 \begin{figure}[htb]
   \centering
   \includegraphics[width=\linewidth]{images/income_support_by_country}
@@ -295,7 +304,11 @@ Income $->$ Support
   \label{fig:inc_sup}
 \end{figure}
 
-HDI $->$ Interest
+% HDI $->$ Interest
+
+Fig $\ref{fig:hdi_int}$ shows Lower HDI countries intend to have high interest in Science.
+But, "United Kindom", and "Finland" are unique compare with the trend in countries level.
+
 \begin{figure}[htb]
   \centering
   \includegraphics[width=\linewidth]{images/hdi_interest_by_country}
@@ -303,7 +316,9 @@ HDI $->$ Interest
   \label{fig:hdi_int}
 \end{figure}
 
-Support, Interest -> Overall
+% Support, Interest -> Overall
+Fig $\ref{fig:int_sup_overall}$ shows the lower Overall Score comes under area around 0.6 < Interest  < 0.7 and 0.4 < Support < 0.7.
+And "Netherlands" and "Japan" shows unique pattern compare with the trend.
 
 \begin{figure}[htb]
   \centering
@@ -312,35 +327,19 @@ Support, Interest -> Overall
   \label{fig:int_sup_overall}
 \end{figure}
 
+\section{Recommendations and Future Research}
 
-% \begin{figure}[htb]
-%   \begin{minipage}[b]{1.0\linewidth}
-%     \centering
-%     \centerline{\includegraphics[width=0.7cm]{images/overall_support_by_country}}
-%   %  \vspace{1.5cm}
-%     \centerline{(a) Support vs Overall by Countries}\medskip
-%   \end{minipage}
-%   \hfill
-%   \begin{minipage}[b]{1.0\linewidth}
-%     \centering
-%     \centerline{\includegraphics[width=0.7cm]{images/overall_interest_by_country}}
-%   %  \vspace{1.5cm}
-%     \centerline{(b) Interest vs Overall by Countries }\medskip
-%   \end{minipage}
-%   %
-%   \caption{Visualize Missing Data}
-%   \label{fig:sup_int_overall}
-%   %
-%   \end{figure}
+Based on the analysis and finding, 
+The support of science in "Netherlands" in too low compare with similar income country.
+May analysis work may be needed to figure the reason. we suggest their government may need to give more funding to support science related works.
 
-\section{Recommendations}
+"Finland" compare with other similar Human Development level countries shows science interest is too low.
+We suggest give more investigation in anlaysis the reason of low interst in science for their students.
 
-Suggested actions or decisions based on the findings.
+% \section{Limitations and Future Research}
 
-\section{Limitations and Future Research}
-
-Limitations in data or methodology.
-Recommendations for future research.
+% Limitations in data or methodology.
+% Recommendations for future research.
 
 \section{Conclusions}
 
